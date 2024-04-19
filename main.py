@@ -2,27 +2,10 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-'''
-url ="https://marine.meteoconsult.fr/meteo-marine/horaires-des-marees/port-maria-999/avril-24"
-try:
-    
-    reponse = requests.get(url)
-    reponse.encoding ="utf-8"
-except:
-    requests.post("https://smsapi.free-mobile.fr/sendmsg?user=49185763&pass=3y7dWE7iULpE0Z&msg=Erreur%20API")
-
-if reponse.status_code ==200:
-    html=reponse.text
-    print(html)
-    f=open("copy.html","w",encoding='utf-8')
-    f.write(html)
-    f.close()
-html = ""
 # Ouvrir un fichier en mode lecture
 with open("copy.html", "r") as fichier:
     # Lire le contenu du fichier
     html = fichier.read()
-'''
 
 # Créer un objet BeautifulSoup
 soup = BeautifulSoup(html, 'html.parser')
@@ -30,55 +13,38 @@ soup = BeautifulSoup(html, 'html.parser')
 # Trouver toutes les balises <div> avec la classe "grid col-16 tide"
 ListeDivGlobal = soup.find_all('div', class_='grid col-16 tide')
 
+# Obtenez le mois actuel et l'année
+current_month = datetime.now().strftime("%m")
+current_year = datetime.now().strftime("%Y")
 
 # Afficher le contenu de chaque balise trouvée
 for div in ListeDivGlobal:
-    print(div)
-    print('************************************')
+    date_div = div.find('div', class_='tide-date')
 
-    # Trouver la balise <div> avec la classe "tide-date week"
-    date_div = soup.find('div', class_='tide-date week')
+    if date_div is not None:
+        date_str = date_div.span.text.strip()
+        day = date_str.split(' ')[1]
 
-    # Récupérer le contenu du span
-    date_str = date_div.span.text.strip()
+        if len(day) == 1:
+            day = '0' + day
 
-    # Convertir la date en une date valide avec le mois en cours
-    # Obtenez le mois actuel
-    current_month = datetime.now().strftime("%B").lower()
+        complete_date_str = f"{day}/{current_month}/{current_year}"
+        date = datetime.strptime(complete_date_str, "%d/%m/%Y")
 
-    # Remplacer le nom du mois dans la chaîne de date par le mois actuel
-    date_str = date_str.replace("vendredi", "Friday").replace("samedi", "Saturday").replace("dimanche", "Sunday").replace("lundi", "Monday").replace("mardi", "Tuesday").replace("mercredi", "Wednesday").replace("jeudi", "Thursday").replace("janvier", current_month).replace("février", current_month).replace("mars", current_month)
+        # Trouver la balise <div> avec la classe "tide-container" à l'intérieur de chaque div
+        tides_div = div.find('div', class_='tide-container')
 
-    # Convertir la chaîne de date en objet datetime
-    date = datetime.strptime(date_str, "%A %d %B")
+        # Vérifier si tides_div est None
+        if tides_div is not None:
+            # Trouver toutes les balises <span> avec la classe "hour" à l'intérieur de tides_div
+            hour_spans = tides_div.find_all('span', class_='hour')
+        
+            # Trouver toutes les balises <span> avec la classe "label" à l'intérieur de tides_div
+            label_spans = tides_div.find_all('span', class_='label')
 
-    # Afficher la date
-    print(date)
-
-
-
-'''
-# maree = soup.find_all("vendredi 22")
-# for child in maree[0].children:
-#     print(child)
-# print(maree.contents[0])
-
-        # Trouver le tableau contenant les données des marées (exemple)
-tableau_marees = soup.find("table", class_="marees-table")
-
-# Récupérer la date du premier jour du mois
-premier_jour_du_mois = datetime.now().replace(day=1).strftime("%Y-%m-%d")
-
-# Trouver les lignes du tableau correspondant au premier jour du mois (exemple)
-premier_jour_rows = tableau_marees.find_all("tr", {"data-date": premier_jour_du_mois})
-
-# Afficher les horaires des marées pour le premier jour du mois
-for row in premier_jour_rows:
-    heures = row.find_all("td")[0].text
-    hauteurs = row.find_all("td")[1].text
-    print("Heures:", heures)
-    print("Hauteurs:", hauteurs)
-
-# else :
-requests.post("https://smsapi.free-mobile.fr/sendmsg?user=49185763&pass=3y7dWE7iULpE0Z&msg=Erreur%20API")
-'''
+            # Trouver toutes les balises <span> avec la classe "height" à l'intérieur de tides_div
+            height_spans = tides_div.find_all('span', class_='height')
+            
+            # Imprimer la date et l'heure pour chaque balise hour_span trouvée
+            for i in range(len(hour_spans)):
+                print(f"{date}, {hour_spans[i].text}, {label_spans[i].text.split(' ')[1]}, {height_spans[i].text}")
