@@ -44,7 +44,26 @@ for div in ListeDivGlobal:
 
             # Trouver toutes les balises <span> avec la classe "height" à l'intérieur de tides_div
             height_spans = tides_div.find_all('span', class_='height')
-            
+
+
+            ''' # ça ne marche pas, a cause des espaces, ça clc
+            # Trouver toutes les balises <span> à l'intérieur des balises <div> avec les classes "coef.tide-coef-level-3", "coef.tide-coef-level-2", ou "coef.tide-coef-level-1"
+            span_tags = tides_div.find_all('div[class^="coef"].tide-coef > span')
+            '''
+
             # Imprimer la date et l'heure pour chaque balise hour_span trouvée
             for i in range(len(hour_spans)):
                 print(f"{date}, {hour_spans[i].text}, {label_spans[i].text.split(' ')[1]}, {height_spans[i].text}")
+
+            '''
+            print(span_tags)
+            
+            # Afficher le contenu des balises <span>
+            for span_tag in span_tags:
+                print("Contenu de la balise <span>:", span_tag.text)
+            else:
+                print('no')
+            '''
+            print("********************************************")
+
+            # A mettre dans des tableaux? mais quelles parties ? lignes par lignes ou tt les temps/date/hauteur... ensembles?
