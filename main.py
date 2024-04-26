@@ -1,4 +1,5 @@
 import requests
+import re
 from bs4 import BeautifulSoup
 from datetime import datetime
 
@@ -16,6 +17,8 @@ ListeDivGlobal = soup.find_all('div', class_='grid col-16 tide')
 # Obtenez le mois actuel et l'année
 current_month = datetime.now().strftime("%m")
 current_year = datetime.now().strftime("%Y")
+
+tableau = []
 
 # Afficher le contenu de chaque balise trouvée
 for div in ListeDivGlobal:
@@ -46,24 +49,49 @@ for div in ListeDivGlobal:
             height_spans = tides_div.find_all('span', class_='height')
 
 
-            ''' # ça ne marche pas, a cause des espaces, ça clc
-            # Trouver toutes les balises <span> à l'intérieur des balises <div> avec les classes "coef.tide-coef-level-3", "coef.tide-coef-level-2", ou "coef.tide-coef-level-1"
-            span_tags = tides_div.find_all('div[class^="coef"].tide-coef > span')
-            '''
+            # 
+            # Trouver toutes les balises <span> à l'intérieur des balises <div> avec les classes
+            span_tags = tides_div.find_all("div", {"class": re.compile("^tide-coef-level-")})
 
+            '''
             # Imprimer la date et l'heure pour chaque balise hour_span trouvée
             for i in range(len(hour_spans)):
                 print(f"{date}, {hour_spans[i].text}, {label_spans[i].text.split(' ')[1]}, {height_spans[i].text}")
-
             '''
-            print(span_tags)
-            
             # Afficher le contenu des balises <span>
             for span_tag in span_tags:
-                print("Contenu de la balise <span>:", span_tag.text)
-            else:
-                print('no')
-            '''
+                print(span_tag.text)
+            
             print("********************************************")
 
-            # A mettre dans des tableaux? mais quelles parties ? lignes par lignes ou tt les temps/date/hauteur... ensembles?
+            
+        # Créer une liste vide pour stocker les informations sur les marées
+            tide_info = []
+
+            # Imprimer la date et l'heure pour chaque balise hour_span trouvée
+            for i in range(len(hour_spans)):
+                # Ajouter l'heure à la date
+                complete_date_str = f"{day}/{current_month}/{current_year} {hour_spans[i].text}"
+                
+                # Convertir la date et l'heure en un objet datetime
+                date = datetime.strptime(complete_date_str, "%d/%m/%Y %Hh%M")
+                
+                # Convertir le type de marée en binaire
+                tide_type = 0 if label_spans[i].text.split(' ')[1] == 'basse' else 1
+                
+                # Convertir la hauteur en mètres
+                height = float(height_spans[i].text.replace('m', ''))
+                
+                # Créer un dictionnaire pour stocker les informations sur une marée
+                tide_dict = {
+                    "datetime": date,
+                    "tide_type": tide_type,
+                    "height": height
+                }
+                
+                # Ajouter le dictionnaire à la liste
+                tide_info.append(tide_dict)
+
+            # Imprimer les informations sur les marées
+            for info in tide_info:
+                print(info)
