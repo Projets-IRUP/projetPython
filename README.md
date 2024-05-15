@@ -47,3 +47,4 @@ for row in premier_jour_rows:
 # else :
 requests.post("https://smsapi.free-mobile.fr/sendmsg?user=49185763&pass=3y7dWE7iULpE0Z&msg=Erreur%20API")
 '''
+test
