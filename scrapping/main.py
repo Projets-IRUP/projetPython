@@ -4,16 +4,14 @@ from datetime import datetime
 import json
 from scrap import *
 from urllib.parse import quote
+from soup import *
 
 # Base de l'url 
 base_url_scrap ="https://marine.meteoconsult.fr/meteo-marine/horaires-des-marees/"
 base_url_api_maree="http://127.0.0.1:5000/"
 
 # Liste des des mois en français
-list_mois = [
-    "janvier", "fevrier", "mars", "avril", "mai", "juin",
-    "juillet", "aout", "septembre", "octobre", "novembre", "decembre"
-]
+list_mois = ["janvier", "fevrier", "mars", "avril", "mai", "juin","juillet", "aout", "septembre", "octobre", "novembre", "decembre"]
 
 # Obtenir la date actuelle
 date_actuelle = datetime.today()
@@ -40,11 +38,13 @@ for port in list_port:
 
     # Construction de l'url
     # Exemple "https://marine.meteoconsult.fr/meteo-marine/horaires-des-marees/port-maria-999/avril-2024"
-    url = base_url_scrap + port + "/"+mois_en_cours+"-"+annee_en_cours
+    url = base_url_scrap + port['url'] + "/"+mois_en_cours+"-"+annee_en_cours
 
     # Scrapping, 
     try:
-        scrap_by_url(url,port)
+        scrap_by_url(url,port['nom'])
+        tab = traitement_donnees_maree(port['nom'])
+        
     except Exception as ex:
         erreur = quote("[Scrapping][Main] Une erreur s'est produite au scrapping du port "+port+", " 
         + ex.args[0]
