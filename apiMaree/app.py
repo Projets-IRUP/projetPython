@@ -1,34 +1,64 @@
 #!/usr/bin/env python
 # encoding: utf-8
-from controller import c_port
 import json
-from flask import Flask
-from flask import jsonify
+from flask import Flask, request
+from classes.db import Db
+# Classe
+
+# Controller
+from classes.portController import get_ports
+from classes.mareeController import *
+
 app = Flask(__name__)
 
-marees_quiberon = [
-    {"heure": "05:30", "hauteur": 3.2},
-    {"heure": "11:42", "hauteur": 0.8},
-    {"heure": "17:59", "hauteur": 3.5},
-    {"heure": "23:59", "hauteur": 0.6}
-]
-@app.route('/maree')
-def index():
-    return json.dumps(marees_quiberon)
 
-@app.route('/GetPorts',methods=['GET'])
-def get_ports():
-    ports = c_port.get_portss()  # Récupérer la liste d'objets Port
+@app.route('/', methods=['GET'])
+def home():
+ return '''<h1>API MAREE</h1>
+<p>Ce site est le prototype d’une API mettant à disposition les ports et les marées.</p>'''
 
-    # Définir une fonction pour sérialiser les objets Port en JSON
-    def port_to_json(port):
-        return {'id_port': port.id_port, 'nom': port.nom, 'url': port.url}
 
-    # Utiliser la fonction 'port_to_json' pour sérialiser chaque objet Port
-    ports_json = json.dumps(ports, default=port_to_json)
+@app.route('/port',methods=['GET'])
+def route_port_get():
+    # Récupérer la liste d'objets Port
+    ports = get_ports()
+    return ports, 200, {'Content-Type': 'application/json'}
 
-    return ports_json, 200, {'Content-Type': 'application/json'}
+
+@app.route('/maree',methods=['POST'])
+def route_maree_post():
+    # Récupérer les données JSON de la requête
+    data = request.get_json()
+    reponse = json.dumps(add_maree(data)) 
+
+    return reponse, 200, {'Content-Type': 'application/json'}
+
+@app.route('/maree1j',methods=['GET'])
+def route_maree_get_1_j():
+    # Récupérer la liste d'objets Maree
+    data = request.get_json()
+    marees = get_marees_by_port_1_j(data)
+    return marees, 200, {'Content-Type': 'application/json'}
+
+@app.route('/maree3j',methods=['GET'])
+def route_maree_get3j():
+    # Récupérer la liste d'objets Maree
+    data = request.get_json()
+    marees = get_marees_by_port_3_j(data)
+    return marees, 200, {'Content-Type': 'application/json'}
+
+@app.route('/maree30j',methods=['GET'])
+def route_maree_get30j():
+    # Récupérer la liste d'objets Maree
+    data = request.get_json()
+    marees = get_marees_by_port_30_j(data)
+    return marees, 200, {'Content-Type': 'application/json'}
+
+
+
+
+# Connection bdd
+Db.open()
 
 # auto reload de l'API
-
 app.run(debug=True)

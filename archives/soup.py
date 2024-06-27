@@ -4,7 +4,7 @@ import re
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-def traitement_donnees_maree(filename:str):
+def traitement_donnees_maree(filename:str) -> None:
     """
     Méthode permetant de récupérer de le html, les informations des marées pour un port sur un mois
 
