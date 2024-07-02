@@ -55,10 +55,8 @@ def route_maree_get30j():
     return marees, 200, {'Content-Type': 'application/json'}
 
 
-
-
-# Connection bdd
-Db.open()
-
-# auto reload de l'API
-app.run(debug=True)
+if __name__ == "__main__":
+    # Connection bdd
+    Db.open()
+    # auto reload de l'API
+    app.run(debug=True)

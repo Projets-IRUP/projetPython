@@ -71,13 +71,14 @@ def extraire_toutes_marees(soup):
     
     return toutes_donnees_maree
 
-def main(filename):
+def analyse(filename ):
+    
     soup = recuperer_html(filename)
     previsions_maree = extraire_toutes_marees(soup)
     
     return previsions_maree
-    for maree in previsions_maree:
-        print(f"Datetime: {maree['datetime']}, Type: {maree['type']}, Hauteur: {maree['hauteur']}, Coefficient: {maree['coefficient']}")
+    # for maree in previsions_maree:
+    #     print(f"Datetime: {maree['datetime']}, Type: {maree['type']}, Hauteur: {maree['hauteur']}, Coefficient: {maree['coefficient']}")
 
-# if __name__ == "__main__":
-#     main('path_to_your_html_file')
+if __name__ == "__main__":
+    pass
