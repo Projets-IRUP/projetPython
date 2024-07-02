@@ -1,50 +1,88 @@
-# Projet Python
 
-## Site à Scrap : 
-- https://marine.meteoconsult.fr/meteo-marine/horaires-des-marees/biarritz-1085/mars-2024
+### Projet IRUP, 2024 
+### Contacts
+Anthony Barriol,  
+Mathis Vercelloni
 
-
-# Ce qu'il faut récupérer : 
-- un port
-- Jour de la semaine
-- Heure Marée basse et haute
-- Coefficient de marée 
-
-partir de grid col-16 tide
-ligne 1827
-
-Convertir les textes en jours de la semaine.
-Convertir les textes en heures de marées
-Convertir les textes en coefficient de marées
-
-boucle sur les ports et une fois sur les mois en cours
+# Projet API Marrée 
 
 
-# Old :
+## Description
+Ce projet vise à développer une API RESTful distribuant les horaires des marées et des ports.
+L’objectif est de fournir une API gratuite consommable et facile d’accès par différentes plateformes 
+tel que l’application Android (projet Kotlin).
 
-'''
-# maree = soup.find_all("vendredi 22")
-# for child in maree[0].children:
-#     print(child)
-# print(maree.contents[0])
+## Fonctionnalités
+* Gestion des ports : Création et suppression et consultation des ports. 
+* Gestion des marées : Création et consultation des horaires des marées par filtrage.  
+* Ajout possible de toutes autres fonctionnalités utiles.
+## Technologies Utilisées
+- Python
+- Flask
+- BeautifulSoup4 (pour le web scraping)
+- Requests (pour effectuer des requêtes HTTP)
+- Base de donnée MySQL
 
-        # Trouver le tableau contenant les données des marées (exemple)
-tableau_marees = soup.find("table", class_="marees-table")
+## Prérequis
+- Python 3
 
-# Récupérer la date du premier jour du mois
-premier_jour_du_mois = datetime.now().replace(day=1).strftime("%Y-%m-%d")
+## Installation
 
-# Trouver les lignes du tableau correspondant au premier jour du mois (exemple)
-premier_jour_rows = tableau_marees.find_all("tr", {"data-date": premier_jour_du_mois})
+1. **Cloner le dépôt:**
+    ```bash
+    git clone https://github.com/Projets-IRUP/projetPython.git
+    ```
 
-# Afficher les horaires des marées pour le premier jour du mois
-for row in premier_jour_rows:
-    heures = row.find_all("td")[0].text
-    hauteurs = row.find_all("td")[1].text
-    print("Heures:", heures)
-    print("Hauteurs:", hauteurs)
 
-# else :
-requests.post("https://smsapi.free-mobile.fr/sendmsg?user=49185763&pass=3y7dWE7iULpE0Z&msg=Erreur%20API")
-'''
-test
+3. **Installer les dépendances:**
+    ```bash
+   pip install flask requests beautifulsoup4
+
+    ```
+
+## Configuration
+Mettre à jour le fichier `db.py` avec les configurations nécessaires, comme les URLs pour le web scraping et les clés API si nécessaire.
+
+## Utilisation
+
+1. **Lancer l'API :**
+    ```bash
+    python3 app.py
+    ```
+
+1. **Lancer le scrapping :**
+    ```bash
+    python3 main.py
+    ```
+2. **Accéder à l'API:**
+    L'API sera accessible à `http://127.0.0.1:5000`.
+
+
+## Structure
+```
+apiMaree/
+├── classes/
+│ ├── pycache/
+│ ├── db.py
+│ ├── maree.py
+│ ├── mareeController.py
+│ ├── mareeModel.py
+│ ├── port.py
+│ ├── portController.py
+│ ├── portModel.py
+│ ├── testMaree.py
+├── app.py
+├── archives/
+│ ├── c_port.py
+│ ├── m_port.py
+│ ├── model.py
+│ ├── soup.py
+├── bddMaree/
+├── scrapping/
+│ ├── pycache/
+│ ├── main.py
+│ ├── scrap.py
+│ ├── soup3.py
+├── port-maria.html
+└── README.md
+```
