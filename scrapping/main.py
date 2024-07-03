@@ -36,7 +36,7 @@ def enregistrement_maree(marees,port):
             # Appel API Maree, méthode GET pour obtenir les ports
             post = BASE_URL_API_MAREE+"maree"
             reponse = requests.post(post,json=maree)
-            print("Statut Code : "+reponse.status_code) 
+            print("Statut Code : "+ str(reponse.status_code)) 
 
         except Exception as exception:
              envoie_sms("[Python][Scrapping][main.py], Une exception a été levée lors d'un enregistrement de maree, port : "+port['nom'] )

@@ -5,7 +5,7 @@ from classes.maree import Maree
 
 def add_maree(data):
     
-    maree = Maree( None, data['datetime'], data['hauteur'], data['coefficient'], data['type'], data['id_port'])
+    maree = Maree( None, data['datetime'], data['hauteur'],  data['type'],data['coefficient'], data['id_port'])
     reponse_id = insert(maree)
     return reponse_id
 

@@ -25,7 +25,7 @@ def scrap_by_url(port):
     reponse.encoding ="utf-8"
     if reponse.status_code ==200:
         html=reponse.text
-        print(html)
+        #print(html)
         f=open(port['nom'] +".html","w",encoding='utf-8')
         f.write(html)
         f.close()
