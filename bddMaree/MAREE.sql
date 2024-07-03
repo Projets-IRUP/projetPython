@@ -27,3 +27,7 @@ INSERT INTO port (nom,url,latitude,longitude)
 VALUES
 (
 'port-maria', 'port-maria-999',47.4781,-3.1234);
+INSERT INTO port (nom,url,latitude,longitude)
+VALUES
+(
+'Le Palais', 'belle-ile-le-palais-1000',47.34720678928164,-3.153561329334396); 
