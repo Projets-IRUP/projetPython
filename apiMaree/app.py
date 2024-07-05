@@ -33,21 +33,23 @@ def route_maree_post():
 
     return reponse, 200, {'Content-Type': 'application/json'}
 
-@app.route('/maree1j',methods=['GET'])
+
+# En poste car biblio android ne prend pas en charge le json dans le body en GET
+@app.route('/maree1j',methods=['POST'])
 def route_maree_get_1_j():
     # Récupérer la liste d'objets Maree
     data = request.get_json()
     marees = get_marees_by_port_1_j(data)
     return marees, 200, {'Content-Type': 'application/json'}
 
-@app.route('/maree3j',methods=['GET'])
+@app.route('/maree3j',methods=['POST'])
 def route_maree_get3j():
     # Récupérer la liste d'objets Maree
     data = request.get_json()
     marees = get_marees_by_port_3_j(data)
     return marees, 200, {'Content-Type': 'application/json'}
 
-@app.route('/maree30j',methods=['GET'])
+@app.route('/maree30j',methods=['POST'])
 def route_maree_get30j():
     # Récupérer la liste d'objets Maree
     data = request.get_json()
